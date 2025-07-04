@@ -1,47 +1,26 @@
+from stats import get_book_text
+from stats import get_count_words
+from stats import get_count_chars
+from stats import dict_to_sorted_list
+import sys
+
 def main():
-    book_path = "books/frankenstein.txt"
+    if len(sys.argv) != 2:
+        print(f"Usage: python3 {sys.argv[0]} <path_to_book>")
+        sys.exit(1)
+    book_path = sys.argv[1]
     text = get_book_text(book_path)
     count_words = get_count_words(text)
     count_chars = get_count_chars(text)
     sorted_list = dict_to_sorted_list(count_chars)
 
-    print(f"--- Begin report of {book_path} ---")
-    print(f"{count_words} words found in the document\n")
+    print("============ BOOKBOT ============")
+    print(f"Analyzing book found at {book_path}...")
+    print("----------- Word Count ----------")
+    print(f"Found {count_words} total words")
+    print("--------- Character Count -------")
     for char in sorted_list:
-        print(f"The '{char['char']}' character was found {char['times']} times")
-    print("--- End report ---")
-
-
-def get_book_text(path):
-    with open(path) as f:
-        return f.read()
-
-
-def get_count_words(text):
-    words = text.split()
-    return len(words)
-
-
-def get_count_chars(text):
-    chars = {}
-    for char in text.lower():
-        if char.isalpha():
-            if char in chars:
-                chars[char] += 1
-            else:
-                chars[char] = 1
-    return chars
-
-
-def sort_on(dict):
-    return dict["times"]
-
-
-def dict_to_sorted_list(chars):
-    list_chars = []
-    for char in chars:
-        list_chars.append({"char": char, "times": chars[char]})
-    list_chars.sort(reverse=True, key=sort_on)
-    return list_chars
+        print(f"{char['char']}: {char['times']}")
+    print("============= END ===============")
 
 main()
